@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Nexus To Success</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+        <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="static/css/form-elements.css">
+        <link rel="stylesheet" href="static/css/style.css">
+
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="static/ico/favicon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="static/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="static/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="static/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="static/ico/apple-touch-icon-57-precomposed.png">
+
+    </head>
+<body id="docBody">
+  <div class="container">
+    <div class="row">
+      <br><br>
+      <form method='post' action='/git'>
+      <input type="text" name="gitLoad" style="border: solid 1px">
+      <button type="submit" class="btn btn-success">Sync Github data
+      </button>
+     <form>
+    </div>
+  </div>
+  <script src="static/js/jquery-1.11.1.min.js"></script>
+  <script src="static/bootstrap/js/bootstrap.min.js"></script>
+  <script src="static/js/jquery.backstretch.min.js"></script>
+  <script src="static/js/scripts.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+$(document).ready(function(){
+$("button").click(function(){
+  $.ajax({
+    url: "#api",
+    type: 'GET'
+    dataType:'json',
+    success: function(result){
+      $("body").html('
+      <div class="container">
+        <br><br>
+        <p>Please check your details below. <strong>Click close after verification!</strong></p>
+        <div class="row">
+          <div class="col-md-2 col-md-offset-2">
+            <img src="'+result.(imageJsonKey)+'">
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-4">
+              <p>First name:  '+result.(nameJsonKey)+'</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-4">
+              <p>Last name:  '+result.(fullNameJsonKey)+'</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-2">
+            <p>Experience: '+result.(repositoriesJsonKey)+'</p>
+          </div>
+          <div class="col-md-4 col-md-offset-6">
+            <p>Skills: '+result.(commitsskillsJsonKey)+'</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <p>Certifications: '+result.(contributorrsJsonKey)+'</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <button type="button" class="btn btn-danger btn-lg" onclick="document.getElementById('docBody').innerHTML =
+                loadPage('syncPage.html');">Close</button>
+          </div>
+        </div>
+      </div>
+      ');
+  }});
+});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+from flask import Flask, jsonify, render_template, request, abort, make_response
+from flask import Response
+from linkedin import linkedin
+import requests
+import pymongo
+from pymongo import MongoClient
+
+app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
+
+API_KEY = "78ht9j59rm89g2"
+API_SECRET = "qaSwXbaBckI0mbMf"
+RETURN_URL = "http://talpa.tech/api"
+authentication = linkedin.LinkedInAuthentication(API_KEY, API_SECRET, RETURN_URL)
+print authentication.authorization_url
+application = linkedin.LinkedInApplication(authentication)
+
+
+@app.route('/',methods=['GET','POST'])
+def get_first():
+        return render_template('index.html')
+
+@app.route('/api',methods=['GET','POST'])
+def get_code():
+        code = request.args.get('code')
+	authentication.authorization_code = code
+	a = authentication.get_access_token()
+	parameters = {"oauth2_access_token": a, "format": "json"}
+	response=requests.get("https://api.linkedin.com/v1/people/~:(id,first-name,last-name,headline,picture-url,industry,summary,specialties,positions:(id,title,summary,start-date,end-date,is-current,company:(id,name,type,size,industry,ticker)),educations:(id,school-name,field-of-study,start-date,end-date,degree,activities,notes),associations,interests,num-recommenders,date-of-birth,publications:(id,title,publisher:(name),authors:(id,name),date,url,summary),patents:(id,title,summary,number,status:(id,name),office:(name),inventors:(id,name),date,url),languages:(id,language:(name),proficiency:(level,name)),skills:(id,skill:(name)),certifications:(id,name,authority:(name),number,start-date,end-date),courses:(id,name,number),recommendations-received:(id,recommendation-type,recommendation-text,recommender),honors-awards,three-current-positions,three-past-positions,volunteer)",parameters)
+	client = MongoClient('localhost', 27017)
+	db = client.recruit
+	data = db.mycollection.insert_one(response.content)
+	return Response(response.content,status = response.status_code,mimetype="application/json")
+	
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80)
+
